@@ -1,0 +1,203 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="container">
+  <h2>Summary Report <small>e-QSI</small></h2>
+    <form action="/showReport" method="POST">
+  <ul class="responsive-table">
+    <li class="table-header">
+      <div class="col">Section A: Search Qriteria</div>
+    </li>
+    <li class="table-row">
+      <div class="col col-1-1" data-label="">Date of Inspection(From/To):</div>
+        <div class="col col-1-2">
+            <label for="dateofbirth">Start Date</label>
+<input type="date" name="start_date" id="dateofbirth">
+        </div>
+        <div class="col col-1-3">
+            <label for="dateofbirth">End Date</label>
+<input type="date" name="end_date" id="dateofbirth">
+        </div>
+    </li>
+    <li class="table-row">
+      <div class="col col-2-1" data-label="Job Id">Customer/Programe</div>
+      <div class="col col-2-2" data-label="Customer Name">
+          <select class="col col-1-3" id="country" name="customer">
+              {%for cus in customer%}
+              <option value="{{cus.id}}" selected>{{cus.customer_program}}</option>
+        {%endfor%}
+              
+        </select>
+        </div>
+    </li>
+    <li class="table-row">
+      <div class="col col-2-1" data-label="Job Id">Inspected By</div>
+      <div class="col col-2-2" data-label="Customer Name">
+          <select class="col col-1-3" id="country" name="inspected_by">
+              {%for sta in staff%}
+              <option value="{{sta.id}}" selected>{{sta.inspected_by}}</option>
+        {%endfor%}
+        </select>
+        </div>
+    </li>
+  </ul>
+    <button type="submit" class="addBtn">Display</button>
+    </form>
+</div>
+
+{%if results%}
+<div class="container" style="padding-top:80px;">
+  <ul class="responsive-table">
+    <li class="table-header">
+      <div class="col">Section B: Results</div>
+    </li>
+      <li class="table-header" style="background-color:#5DABFF;">
+      <div class="col col-1-1">Checklists</div>
+    <div class="col col-1-2" style="text-align: center;">No. of Checks</div>
+    <div class="col col-1-3" style="text-align: center;">No. of Rejects</div>
+    </li>
+      {%for result in results%}
+    <li class="table-row" style="background-color: #A0CEFF;">
+      <div class="col col-1-1" data-label="" >{{result['checklist']}}</div>
+    </li>
+      {%for item in result['check_items']%}
+    <li class="table-row">
+      <div class="col col-1-1" data-label="Job Id">{{item['name']}}</div>
+      <div class="col col-1-2" style="text-align: center;">{{item['checks']}}</div>
+      <div class="col col-1-3" style="text-align: center;">{{item['rejects']}}</div>
+    </li>
+      {%endfor%}
+      {%endfor%}
+  </ul>
+</div>
+{%endif%}
+
+
+
+
+
+<style>
+body {
+  font-family: "lato", sans-serif;
+}
+  select {
+    width: 100%;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+.container {
+  max-width: 2000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+h2 {
+  font-size: 26px;
+  margin: 20px 0;
+  text-align: center;
+}
+h2 small {
+  font-size: 0.5em;
+}
+
+.responsive-table li {
+  border-radius: 3px;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.responsive-table .table-header {
+  background-color: #95a5a6;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.responsive-table .table-row {
+  background-color: #ffffff;
+  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+}
+.responsive-table .col-1-1 {
+  flex-basis: 50%;
+}
+.responsive-table .col-1-2 {
+  flex-basis: 25%;
+}
+.responsive-table .col-1-3 {
+  flex-basis: 25%;
+}
+.responsive-table .col-2-1 {
+  flex-basis: 50%;
+}
+.responsive-table .col-2-2 {
+  flex-basis: 50%;
+}
+@media all and (max-width: 767px) {
+  .responsive-table .table-header {
+    display: none;
+  }
+  .responsive-table li {
+    display: block;
+  }
+  .responsive-table .col {
+    flex-basis: 100%;
+  }
+  .responsive-table .col {
+    display: flex;
+    padding: 10px 0;
+  }
+  .responsive-table .col:before {
+    color: #6c7a89;
+    padding-right: 10px;
+    content: attr(data-label);
+    flex-basis: 50%;
+    text-align: right;
+  }
+}
+    
+    [type="date"] {
+  background: #fff
+    url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)
+      97% 50% no-repeat;
+}
+[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+/* custom styles */
+label {
+  display: block;
+}
+input {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 3px 5px;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+  width: 190px;
+}
+  .addBtn {
+    width: 80px;
+    height: 35px;
+    width: 20%;
+    background-color: #4CAF50;
+    color: white;
+    position:absolute; 
+    right:140px;
+    padding: 4px;
+    margin: 2px 1px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+    </style>
+  {% endblock %}
